@@ -655,6 +655,32 @@ class Level_BossLevelNoUnlock(LevelGen):
             implicit_unlock=False
         )
 
+class Level_CustomGoToObjSmall(RoomGridLevel):
+    """
+    Custom small GoToObj level with two objects, and a compound instruction
+    to visit them in order. No distractors.
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        objs = self.add_distractors(num_distractors=2)
+        assert len(objs) == 2
+
+        self.instrs = BeforeInstr(
+            GoToInstr(ObjDesc(objs[0].type, objs[0].color)),
+            GoToInstr(ObjDesc(objs[1].type, objs[1].color)),
+            strict=True
+        )
+
+
 
 # Register the levels in this file
 register_levels(__name__, globals())
