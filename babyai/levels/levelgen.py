@@ -55,7 +55,7 @@ class RoomGridLevel(RoomGrid):
 
         # If we've successfully completed the mission
         status = self.instrs.verify(action)
-
+        info['status'] = (self.instrs.a_done, self.instrs.b_done)
         if status is 'success':
             done = True
             reward = self._reward()
