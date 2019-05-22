@@ -44,7 +44,7 @@ class RoomGridLevel(RoomGrid):
         num_navs = self.num_navs_needed(self.instrs)
         self.max_steps = num_navs * nav_time_maze
 
-        return obs
+        return obs, {'status': ('continue', False)}
 
     def step(self, action):
         obs, reward, done, info = super().step(action)
