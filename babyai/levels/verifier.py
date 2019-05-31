@@ -478,7 +478,7 @@ class AfterInstr(SeqInstr):
     """
 
     def surface(self, env):
-        return self.instr_a.surface(env) + ' after you ' + self.instr_b.surface(env)
+        return self.instr_a.surface(env) + ' after ' + self.instr_b.surface(env)
 
     def reset_verifier(self, env):
         super().reset_verifier(env)
@@ -545,6 +545,46 @@ class AndInstr(SeqInstr):
                 return 'failure'
 
         if self.a_done == 'success' and self.b_done == 'success':
+            return 'success'
+
+        return 'continue'
+
+
+class OrInstr(SeqInstr):
+    """
+    Disjunction of two actions, both can be completed in any order, but as soon
+    as one finishes we have completed the compound instruction.
+
+    eg: go to the red door or pick up the blue ball
+    """
+
+    def __init__(self, instr_a, instr_b, strict=False):
+        assert isinstance(instr_a, ActionInstr)
+        assert isinstance(instr_b, ActionInstr)
+        super().__init__(instr_a, instr_b, strict)
+
+    def surface(self, env):
+        return self.instr_a.surface(env) + ' or ' + self.instr_b.surface(env)
+
+    def reset_verifier(self, env):
+        super().reset_verifier(env)
+        self.instr_a.reset_verifier(env)
+        self.instr_b.reset_verifier(env)
+        self.a_done = False
+        self.b_done = False
+
+    def verify(self, action):
+        if self.a_done is not 'success':
+            self.a_done = self.instr_a.verify(action)
+
+        if self.b_done is not 'success':
+            self.b_done = self.instr_b.verify(action)
+
+        if use_done_actions and action is self.env.actions.done:
+            if self.a_done == 'failure' and self.b_done == 'failure':
+                return 'failure'
+
+        if self.a_done == 'success' or self.b_done == 'success':
             return 'success'
 
         return 'continue'

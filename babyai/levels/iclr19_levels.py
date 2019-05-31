@@ -680,6 +680,42 @@ class Level_CustomGoToObjSmall(RoomGridLevel):
             strict=True
         )
 
+class Level_CustomGoToObjMedium(RoomGridLevel):
+    """
+    Custom small GoToObj level with two objects, and a compound instruction.
+    The tasks can be connected with "and", "or", "then"(after) or "before".
+
+    No distractors.
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        objs = self.add_distractors(num_distractors=2)
+        assert len(objs) == 2
+
+        # pick randomly between Before, After, And, Or
+        i = self._rand_int(0,4)
+        obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+
+        if i == 0:
+            self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
+        elif i == 1:
+            self.instrs = AfterInstr(obj_instr_0, obj_instr_1, strict=True)
+        elif i == 2:
+            self.instrs = AndInstr(obj_instr_0, obj_instr_1)
+        elif i == 3:
+            self.instrs = OrInstr(obj_instr_0, obj_instr_1)
+
+
 
 
 # Register the levels in this file
