@@ -702,7 +702,7 @@ class Level_CustomGoToObjMedium(RoomGridLevel):
         assert len(objs) == 2
 
         # pick randomly between Before, After, And, Or
-        i = self._rand_int(0,4)
+        i = self._rand_int(0,2)
         obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
         obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
 
@@ -710,10 +710,10 @@ class Level_CustomGoToObjMedium(RoomGridLevel):
             self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
         elif i == 1:
             self.instrs = AfterInstr(obj_instr_0, obj_instr_1, strict=True)
-        elif i == 2:
-            self.instrs = AndInstr(obj_instr_0, obj_instr_1)
-        elif i == 3:
-            self.instrs = OrInstr(obj_instr_0, obj_instr_1)
+        # elif i == 2:
+        #     self.instrs = AndInstr(obj_instr_0, obj_instr_1)
+        # elif i == 3:
+        #     self.instrs = OrInstr(obj_instr_0, obj_instr_1)
 
 
 
