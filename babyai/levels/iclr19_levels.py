@@ -716,6 +716,32 @@ class Level_CustomGoToObjMedium(RoomGridLevel):
         #     self.instrs = OrInstr(obj_instr_0, obj_instr_1)
 
 
+class Level_CustomGoToObjDistr(RoomGridLevel):
+    """
+    """
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        objs = self.add_distractors(num_distractors=3)
+        o1, o2 = self._rand_subset(objs, 2)
+        self.check_objs_reachable()
+
+        # pick randomly between Before, After, And, Or
+        i = self._rand_int(0,2)
+        obj_instr_0 = GoToInstr(ObjDesc(o1.type, o1.color))
+        obj_instr_1 = GoToInstr(ObjDesc(o2.type, o2.color))
+
+        if i == 0:
+            self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
+        elif i == 1:
+            self.instrs = AfterInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
 # Register the levels in this file
