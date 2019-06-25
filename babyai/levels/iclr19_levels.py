@@ -680,10 +680,10 @@ class Level_CustomGoToObjSmall(RoomGridLevel):
             strict=True
         )
 
-class Level_CustomGoToObjAnd(RoomGridLevel):
+class Level_CustomGoToObjAndOr(RoomGridLevel):
     """
-    Custom small GoToObj level with two objects, and a compound instruction
-    to visit them in order. No distractors.
+    Custom small GoToObj level with two objects, and a compound instruction with
+    connectors AND and OR. No distractors.
     """
 
     def __init__(self, room_size=8, seed=None):
@@ -699,11 +699,14 @@ class Level_CustomGoToObjAnd(RoomGridLevel):
         objs = self.add_distractors(num_distractors=2)
         assert len(objs) == 2
 
-        self.instrs = AndInstr(
-            GoToInstr(ObjDesc(objs[0].type, objs[0].color)),
-            GoToInstr(ObjDesc(objs[1].type, objs[1].color)),
-            strict=True
-        )
+        i = self._rand_int(0,2)
+        obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+
+        if i == 0:
+            self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
+        elif i == 1:
+            self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
 
 class Level_CustomGoToObjMedium(RoomGridLevel):
     """
