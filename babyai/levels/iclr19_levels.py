@@ -803,7 +803,7 @@ class Level_TransferBase(RoomGridLevel):
         )
 
 
-class Level_TransferGoToObjSmall(Level_TransferBase):
+class Level_TransferGoToObjSmall0(Level_TransferBase):
     """
     Custom small GoToObj level with two objects, and a compound instruction.
     The tasks can be connected with "and", "or", "then"(after) or "before".
