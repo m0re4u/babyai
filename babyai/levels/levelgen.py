@@ -161,6 +161,51 @@ class RoomGridLevel(RoomGrid):
         """
         raise NotImplementedError
 
+    def add_new_objects(self, i=None, j=None, num_new_objs=10, all_unique=True, new_color=False, new_object=False):
+        """
+        Add objects that is might not be in the original BabyAI list of objects
+        to aid in transfer learning.
+        """
+        # Collect a list of existing objects
+        objs = []
+        for row in self.room_grid:
+            for room in row:
+                for obj in room.objs:
+                    objs.append((obj.type, obj.color))
+
+        # List of new objects added
+        dists = []
+
+        while len(dists) < num_new_objs:
+            if new_color:
+                color = self._rand_elem(self.NEW_COLOR_NAMES)
+            else:
+                color = self._rand_elem(self.OLD_COLOR_NAMES)
+
+            if new_object:
+                type = self._rand_elem(self.NEW_OBJECTS)
+            else:
+                type = self._rand_elem(self.OLD_OBJECTS)
+            obj = (type, color)
+
+            if all_unique and obj in objs:
+                continue
+
+            # Add the object to a random room if no room specified
+            room_i = i
+            room_j = j
+            if room_i == None:
+                room_i = self._rand_int(0, self.num_cols)
+            if room_j == None:
+                room_j = self._rand_int(0, self.num_rows)
+
+            dist, pos = self.add_object(room_i, room_j, *obj)
+
+            objs.append(obj)
+            dists.append(dist)
+
+        return dists
+
     @property
     def level_name(self):
         return self.__class__.level_name
