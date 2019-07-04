@@ -4,7 +4,7 @@ from enum import Enum
 from gym_minigrid.minigrid import COLOR_NAMES, DIR_TO_VEC
 
 # Object types we are allowed to describe in language
-OBJ_TYPES = ['box', 'ball', 'key', 'door']
+OBJ_TYPES = ['box', 'ball', 'key', 'door', 'triangle']
 
 # Object types we are allowed to describe in language
 OBJ_TYPES_NOT_DOOR = list(filter(lambda t: t is not 'door', OBJ_TYPES))

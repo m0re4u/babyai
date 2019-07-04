@@ -775,17 +775,22 @@ class Level_TransferBase(RoomGridLevel):
         # object types
         from gym_minigrid.minigrid import COLORS, COLOR_NAMES, COLOR_TO_IDX, IDX_TO_COLOR
         from copy import deepcopy
-        # global COLORS, COLOR_NAMES, COLOR_TO_IDX, IDX_TO_COLOR
 
         self.NEW_COLORS = {
             'cyan': np.array([0, 128, 128])
             # 'magenta': np.array([128, 0, 128])
         }
         self.NEW_COLOR_NAMES = sorted(list(self.NEW_COLORS.keys()))
-        # self.NEW_OBJECTS=[
-        #     'triangle'
-        # ]
         self.OLD_COLOR_NAMES = list(set(COLOR_NAMES) - set(self.NEW_COLOR_NAMES))
+
+        self.NEW_OBJECTS=[
+            'triangle'
+        ]
+        self.OLD_OBJECTS=[
+            'key',
+            'ball',
+            'box'
+        ]
 
         if 'cyan' not in COLOR_NAMES:
             COLORS.update(self.NEW_COLORS)
@@ -823,6 +828,66 @@ class Level_TransferGoToObjSmall0(Level_TransferBase):
         objs = self.add_new_objects(num_new_objs=1, new_color=False, new_object=False)
         # Add an object with a color we have not seen before
         objs.extend(self.add_new_objects(num_new_objs=1, new_color=True, new_object=False))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        self.instrs = BeforeInstr(
+            GoToInstr(ObjDesc(objs[0].type, objs[0].color)),
+            GoToInstr(ObjDesc(objs[1].type, objs[1].color)),
+            strict=True
+        )
+
+class Level_TransferGoToObjSmall1(Level_TransferBase):
+    """
+    Custom small GoToObj level with two objects, and a compound instruction.
+    The tasks can be connected with "and", "or", "then"(after) or "before".
+
+    No distractors.
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(num_new_objs=1, new_color=False, new_object=True))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        self.instrs = BeforeInstr(
+            GoToInstr(ObjDesc(objs[0].type, objs[0].color)),
+            GoToInstr(ObjDesc(objs[1].type, objs[1].color)),
+            strict=True
+        )
+
+class Level_TransferGoToObjSmall2(Level_TransferBase):
+    """
+    Custom small GoToObj level with two objects, and a compound instruction.
+    The tasks can be connected with "and", "or", "then"(after) or "before".
+
+    No distractors.
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(num_new_objs=1, new_color=True, new_object=True))
         # shuffle the list to ensure more randomness with new object
         self.np_random.shuffle(objs)
         assert len(objs) == 2
