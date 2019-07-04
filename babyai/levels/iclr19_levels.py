@@ -957,7 +957,6 @@ class Level_TransferGoToObjBeforeAfter1(Level_TransferBase):
         obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
         obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
 
-
         if i == 0:
             self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
         elif i == 1:
@@ -994,6 +993,102 @@ class Level_TransferGoToObjBeforeAfter2(Level_TransferBase):
             self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
         elif i == 1:
             self.instrs = AfterInstr(obj_instr_0, obj_instr_1, strict=True)
+
+
+class Level_TransferGoToObjAndOr0(Level_TransferBase):
+    """
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=True, new_object=False))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        i = self._rand_int(0, 2)
+        obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+
+        if i == 0:
+            self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
+        elif i == 1:
+            self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
+
+
+class Level_TransferGoToObjAndOr1(Level_TransferBase):
+    """
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=True))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        i = self._rand_int(0, 2)
+        obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+
+        if i == 0:
+            self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
+        elif i == 1:
+            self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
+
+
+class Level_TransferGoToObjAndOr2(Level_TransferBase):
+    """
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=True, new_object=True))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        i = self._rand_int(0, 2)
+        obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+
+        if i == 0:
+            self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
+        elif i == 1:
+            self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
 # Register the levels in this file
