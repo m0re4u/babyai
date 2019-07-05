@@ -1091,5 +1091,36 @@ class Level_TransferGoToObjAndOr2(Level_TransferBase):
             self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
+class Level_CustomUnblockPickupSmall(RoomGridLevel):
+    """
+    Pick up an object, the object may be in another room. The path may
+    be blocked by one or more obstructors.
+    """
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=2,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        self.connect_all()
+        objs = self.add_distractors(num_distractors=2, all_unique=False)
+
+        # Ensure that at least one object is not reachable without unblocking
+        if self.check_objs_reachable(raise_exc=False):
+            raise RejectSampling('all objects reachable')
+
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        obj_instr_0 = PickupInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = PickupInstr(ObjDesc(objs[1].type, objs[1].color))
+        self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
+
+
+
 # Register the levels in this file
 register_levels(__name__, globals())
