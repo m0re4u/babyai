@@ -714,6 +714,54 @@ class Level_CustomGoToObjAndOr(RoomGridLevel):
         elif i == 1:
             self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
 
+class Level_CustomGoToObjAnd(RoomGridLevel):
+    """
+    Custom small GoToObj level with two objects, and a compound instruction with
+    connectors AND and OR. No distractors.
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        objs = self.add_distractors(num_distractors=2)
+        assert len(objs) == 2
+
+        obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+
+        self.instrs = AndInstr(obj_instr_0, obj_instr_1)
+
+class Level_CustomGoToObjOr(RoomGridLevel):
+    """
+    Custom small GoToObj level with two objects, and a compound instruction with
+    connectors AND and OR. No distractors.
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        objs = self.add_distractors(num_distractors=2)
+        assert len(objs) == 2
+
+        obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+
+        self.instrs = OrInstr(obj_instr_0, obj_instr_1)
+
 
 class Level_CustomGoToObjMedium(RoomGridLevel):
     """

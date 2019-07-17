@@ -62,6 +62,7 @@ class RoomGridLevel(RoomGrid):
         elif status is 'failure':
             done = True
             reward = 0
+            info['no_reward_reason'] = 'subtask_failed'
 
         return obs, reward, done, info
 
