@@ -1043,7 +1043,7 @@ class Level_TransferGoToObjBeforeAfter2(Level_TransferBase):
             self.instrs = AfterInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
-class Level_TransferGoToObjAndOr0(Level_TransferBase):
+class Level_TransferGoToObjAnd0(Level_TransferBase):
     """
     """
 
@@ -1065,17 +1065,13 @@ class Level_TransferGoToObjAndOr0(Level_TransferBase):
         self.np_random.shuffle(objs)
         assert len(objs) == 2
 
-        i = self._rand_int(0, 2)
         obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
         obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
 
-        if i == 0:
-            self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
-        elif i == 1:
-            self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
+        self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
-class Level_TransferGoToObjAndOr1(Level_TransferBase):
+class Level_TransferGoToObjAnd1(Level_TransferBase):
     """
     """
 
@@ -1097,17 +1093,13 @@ class Level_TransferGoToObjAndOr1(Level_TransferBase):
         self.np_random.shuffle(objs)
         assert len(objs) == 2
 
-        i = self._rand_int(0, 2)
         obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
         obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
 
-        if i == 0:
-            self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
-        elif i == 1:
-            self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
+        self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
-class Level_TransferGoToObjAndOr2(Level_TransferBase):
+class Level_TransferGoToObjAnd2(Level_TransferBase):
     """
     """
 
@@ -1129,14 +1121,10 @@ class Level_TransferGoToObjAndOr2(Level_TransferBase):
         self.np_random.shuffle(objs)
         assert len(objs) == 2
 
-        i = self._rand_int(0, 2)
         obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
         obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
 
-        if i == 0:
-            self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
-        elif i == 1:
-            self.instrs = OrInstr(obj_instr_0, obj_instr_1, strict=True)
+        self.instrs = AndInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
 class Level_CustomUnblockPickupSmall(RoomGridLevel):
