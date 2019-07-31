@@ -55,7 +55,11 @@ class RoomGridLevel(RoomGrid):
 
         # If we've successfully completed the mission
         status = self.instrs.verify(action)
-        info['status'] = (self.instrs.a_done, self.instrs.b_done)
+        if isinstance(self.instrs, SeqInstr):
+            info['status'] = (self.instrs.a_done, self.instrs.b_done)
+        elif isinstance(self.instrs, ThreeSeqInstr):
+            info['status'] = tuple(self.instrs.done)
+
         if status is 'success':
             done = True
             reward = self._reward()
@@ -152,6 +156,11 @@ class RoomGridLevel(RoomGrid):
             self.validate_instrs(instr.instr_a)
             self.validate_instrs(instr.instr_b)
             return
+        elif isinstance(instr, ThreeSeqInstr):
+            self.validate_instrs(instr.instr_a)
+            self.validate_instrs(instr.instr_b)
+            self.validate_instrs(instr.instr_c)
+            return
 
         assert False, "unhandled instruction type"
 
@@ -231,6 +240,11 @@ class RoomGridLevel(RoomGrid):
             na = self.num_navs_needed(instr.instr_a)
             nb = self.num_navs_needed(instr.instr_b)
             return na + nb
+        elif isinstance(instr, ThreeSeqInstr):
+            na = self.num_navs_needed(instr.instr_a)
+            nb = self.num_navs_needed(instr.instr_b)
+            nc = self.num_navs_needed(instr.instr_c)
+            return na + nb + nc
 
     def open_all_doors(self):
         """

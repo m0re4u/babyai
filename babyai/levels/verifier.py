@@ -486,6 +486,20 @@ class SeqInstr(Instr):
         self.instr_b = instr_b
         self.strict = strict
 
+class ThreeSeqInstr(Instr):
+    """
+    """
+
+    def __init__(self, instr_a, instr_b, instr_c, strict=False):
+        assert isinstance(instr_a, ActionInstr)
+        assert isinstance(instr_b, ActionInstr)
+        assert isinstance(instr_c, ActionInstr)
+        self.instr_a = instr_a
+        self.instr_b = instr_b
+        self.instr_c = instr_c
+        self.strict = strict
+
+
 
 class BeforeInstr(SeqInstr):
     """
@@ -646,5 +660,83 @@ class OrInstr(SeqInstr):
 
         if self.a_done == 'success' or self.b_done == 'success':
             return 'success'
+
+        return 'continue'
+
+
+class ThreeOrderedInstr(ThreeSeqInstr):
+    """
+    """
+    def __init__(self, instr_a, instr_b, instr_c, strict=False, mode='beforebefore'):
+        super().__init__(instr_a, instr_b, instr_c, strict)
+        MODES = [
+            'beforebefore',
+            'beforeafter',
+            'afterbefore',
+            'afterafter',
+        ]
+        assert mode in MODES
+        self.mode = mode
+        if self.mode == 'beforebefore':
+            self.conn_words = ['then','then']
+            self.tid = [0,1,2]
+        elif self.mode == 'beforeafter':
+            self.tid = [2,0,1]
+            self.conn_words = ['then','after']
+        elif self.mode == 'afterbefore':
+            self.tid = [1,0,2]
+            self.conn_words = ['after','then']
+        elif self.mode == 'afterafter':
+            self.tid = [2,1,0]
+            self.conn_words = ['after','after']
+
+    def surface(self, env):
+        return f"{self.instr_a.surface(env)} {self.conn_words[0]} {self.instr_b.surface(env)} {self.conn_words[1]} {self.instr_c.surface(env)}"
+
+    def reset_verifier(self, env):
+        super().reset_verifier(env)
+        self.instr_a.reset_verifier(env)
+        self.instr_b.reset_verifier(env)
+        self.instr_c.reset_verifier(env)
+        self.instr_list = [self.instr_a, self.instr_b, self.instr_c]
+        self.done = [False,False,False]
+
+    def verify(self, action):
+        if self.done[self.tid[1]] == 'success':
+            self.done[self.tid[2]] = self.instr_list[self.tid[2]].verify(action)
+            self.instr_list[self.tid[2]].desc.find_matching_objs(self.instr_list[self.tid[2]].env)
+            if self.done[self.tid[2]] == 'failure':
+                return 'failure'
+            if self.done[self.tid[2]] == 'success':
+                return 'success'
+        elif self.done[self.tid[0]] == 'success':
+            self.done[self.tid[1]] = self.instr_list[self.tid[1]].verify(action)
+            self.instr_list[self.tid[1]].desc.find_matching_objs(self.instr_list[self.tid[1]].env)
+
+            if self.done[self.tid[1]] == 'failure':
+                return 'failure'
+
+            if self.done[self.tid[1]] == 'success':
+                return self.verify(action)
+
+            if self.strict:
+                if self.instr_list[self.tid[2]].verify(action) == 'success':
+                    return 'failure'
+        else:
+            self.done[self.tid[0]] = self.instr_list[self.tid[0]].verify(action)
+            self.instr_list[self.tid[0]].desc.find_matching_objs(self.instr_list[self.tid[0]].env)
+
+            if self.done[self.tid[0]] == 'failure':
+                return 'failure'
+
+            if self.done[self.tid[0]] == 'success':
+                return self.verify(action)
+
+            # In strict mode, completing b or c first means failure
+            if self.strict:
+                if self.instr_list[self.tid[1]].verify(action) == 'success':
+                    return 'failure'
+                if self.instr_list[self.tid[2]].verify(action) == 'success':
+                    return 'failure'
 
         return 'continue'

@@ -1216,5 +1216,41 @@ class Level_CustomGoToObjMultiple(RoomGridLevel):
 
         self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
 
+
+class Level_CustomGoToObjThrees(RoomGridLevel):
+    """
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        objs = self.add_distractors(num_distractors=3)
+        assert len(objs) == 3
+        i = self._rand_int(0,3)
+
+        go_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        go_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        go_2 = GoToInstr(ObjDesc(objs[2].type, objs[2].color))
+
+        if i == 0:
+            # then then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforebefore')
+        elif i == 1:
+            # then after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforeafter')
+        elif i == 2:
+            # after then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterbefore')
+        elif i == 3:
+            # after after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
+
 # Register the levels in this file
 register_levels(__name__, globals())
