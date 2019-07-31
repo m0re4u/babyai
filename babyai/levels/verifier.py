@@ -302,6 +302,63 @@ class GoToInstr(ActionInstr):
 
         return 'continue'
 
+class RepeatGoToInstr(ActionInstr):
+    """
+    Go next to (and look towards) an object matching a given description,
+    but do it two times.
+    eg: go to the door twice
+    """
+
+    def __init__(self, obj_desc, repeat=2):
+        super().__init__()
+        assert repeat == 2 or repeat == 3
+        self.desc = obj_desc
+        self.visited = 0
+        if repeat == 2:
+            self.max_visits = 2
+            self.repeat_word = 'twice'
+        elif repeat == 3:
+            self.max_visits = 3
+            self.repeat_word = 'thrice'
+
+    def surface(self, env):
+        return 'go to ' + self.desc.surface(env) + ' ' + self.repeat_word
+
+    def reset_verifier(self, env):
+        super().reset_verifier(env)
+
+        # Identify set of possible matching objects in the environment
+        self.desc.find_matching_objs(env)
+
+    def shuffle_object_locations(self):
+        room = self.env.room_from_pos(*self.env.start_pos)
+
+        obj_descs = []
+        for i in range(self.env.grid.width):
+            for j in range(self.env.grid.height):
+                cell = self.env.grid.get(i,j)
+                if cell is not None and cell.type != 'wall':
+                    obj_descs.append((cell.type, cell.color))
+                    self.env.grid.set(i,j, None)
+
+        room.objs.clear()
+        for obj_t, obj_c in obj_descs:
+            self.env.add_object(0,0, kind=obj_t, color=obj_c)
+        self.desc.find_matching_objs(self.env)
+
+    def verify_action(self, action):
+        # For each object position
+        for pos in self.desc.obj_poss:
+            # If the agent is next to (and facing) the object
+            if np.array_equal(pos, self.env.front_pos):
+                self.visited += 1
+                self.shuffle_object_locations()
+
+        if self.visited == self.max_visits:
+            return 'success'
+        else:
+            return 'continue'
+
 
 class PickupInstr(ActionInstr):
     """
@@ -449,6 +506,7 @@ class BeforeInstr(SeqInstr):
     def verify(self, action):
         if self.a_done == 'success':
             self.b_done = self.instr_b.verify(action)
+            self.instr_b.desc.find_matching_objs(self.instr_b.env)
 
             if self.b_done == 'failure':
                 return 'failure'
@@ -457,6 +515,8 @@ class BeforeInstr(SeqInstr):
                 return 'success'
         else:
             self.a_done = self.instr_a.verify(action)
+            self.instr_b.desc.find_matching_objs(self.instr_b.env)
+
             if self.a_done == 'failure':
                 return 'failure'
 

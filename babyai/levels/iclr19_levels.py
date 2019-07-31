@@ -1158,5 +1158,63 @@ class Level_CustomUnblockPickupSmall(RoomGridLevel):
 
 
 
+class Level_CustomGoToObjMultiple(RoomGridLevel):
+    """
+    Pick up an object, the object may be in another room. The path may
+    be blocked by one or more obstructors.
+    """
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        objs = self.add_distractors(num_distractors=2, all_unique=False)
+        self.np_random.shuffle(objs)
+        i = self._rand_int(0, 9)
+        assert len(objs) == 2
+        if i == 0:
+            # 1 1
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 1:
+            # 2 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 2:
+            # 1 2
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 3:
+            # 2 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 4:
+            # 1 3
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 5:
+            # 3 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 6:
+            # 2 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 7:
+            # 3 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 8:
+            # 3 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+
+        self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
+
 # Register the levels in this file
 register_levels(__name__, globals())
