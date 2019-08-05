@@ -1252,5 +1252,335 @@ class Level_CustomGoToObjThrees(RoomGridLevel):
             # after after
             self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
 
+
+class Level_TransferGoToObjMultiple0(RoomGridLevel):
+    """
+    Pick up an object, the object may be in another room. The path may
+    be blocked by one or more obstructors.
+    """
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=True, new_object=False))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        i = self._rand_int(0, 9)
+        if i == 0:
+            # 1 1
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 1:
+            # 2 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 2:
+            # 1 2
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 3:
+            # 2 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 4:
+            # 1 3
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 5:
+            # 3 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 6:
+            # 2 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 7:
+            # 3 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 8:
+            # 3 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+
+        self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
+
+
+class Level_TransferGoToObjMultiple1(RoomGridLevel):
+    """
+    Pick up an object, the object may be in another room. The path may
+    be blocked by one or more obstructors.
+    """
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=True))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        i = self._rand_int(0, 9)
+        if i == 0:
+            # 1 1
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 1:
+            # 2 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 2:
+            # 1 2
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 3:
+            # 2 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 4:
+            # 1 3
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 5:
+            # 3 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 6:
+            # 2 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 7:
+            # 3 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 8:
+            # 3 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+
+        self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
+
+
+class Level_TransferGoToObjMultiple2(RoomGridLevel):
+    """
+    Pick up an object, the object may be in another room. The path may
+    be blocked by one or more obstructors.
+    """
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add an object we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=True, new_object=True))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 2
+
+        i = self._rand_int(0, 9)
+        if i == 0:
+            # 1 1
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 1:
+            # 2 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 2:
+            # 1 2
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 3:
+            # 2 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 4:
+            # 1 3
+            obj_instr_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 5:
+            # 3 1
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        elif i == 6:
+            # 2 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=2)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+        elif i == 7:
+            # 3 2
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=2)
+        elif i == 8:
+            # 3 3
+            obj_instr_0 = RepeatGoToInstr(ObjDesc(objs[0].type, objs[0].color), repeat=3)
+            obj_instr_1 = RepeatGoToInstr(ObjDesc(objs[1].type, objs[1].color), repeat=3)
+
+        self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
+
+
+class Level_TransferGoToObjThrees0(RoomGridLevel):
+    """
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add objects we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=2, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=True, new_object=False))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 3
+
+        i = self._rand_int(0,3)
+
+        go_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        go_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        go_2 = GoToInstr(ObjDesc(objs[2].type, objs[2].color))
+
+        if i == 0:
+            # then then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforebefore')
+        elif i == 1:
+            # then after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforeafter')
+        elif i == 2:
+            # after then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterbefore')
+        elif i == 3:
+            # after after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
+
+
+class Level_TransferGoToObjThrees1(RoomGridLevel):
+    """
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add objects we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=2, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=False, new_object=True))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 3
+
+        i = self._rand_int(0,3)
+
+        go_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        go_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        go_2 = GoToInstr(ObjDesc(objs[2].type, objs[2].color))
+
+        if i == 0:
+            # then then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforebefore')
+        elif i == 1:
+            # then after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforeafter')
+        elif i == 2:
+            # after then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterbefore')
+        elif i == 3:
+            # after after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
+
+class Level_TransferGoToObjThrees2(RoomGridLevel):
+    """
+    """
+
+    def __init__(self, room_size=8, seed=None):
+        super().__init__(
+            num_rows=1,
+            num_cols=1,
+            room_size=room_size,
+            seed=seed
+        )
+
+    def gen_mission(self):
+        self.place_agent()
+        # Add objects we have seen before
+        objs = self.add_new_objects(
+            num_new_objs=2, new_color=False, new_object=False)
+        # Add an object with a color we have not seen before
+        objs.extend(self.add_new_objects(
+            num_new_objs=1, new_color=True, new_object=True))
+        # shuffle the list to ensure more randomness with new object
+        self.np_random.shuffle(objs)
+        assert len(objs) == 3
+
+        i = self._rand_int(0,3)
+
+        go_0 = GoToInstr(ObjDesc(objs[0].type, objs[0].color))
+        go_1 = GoToInstr(ObjDesc(objs[1].type, objs[1].color))
+        go_2 = GoToInstr(ObjDesc(objs[2].type, objs[2].color))
+
+        if i == 0:
+            # then then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforebefore')
+        elif i == 1:
+            # then after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='beforeafter')
+        elif i == 2:
+            # after then
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterbefore')
+        elif i == 3:
+            # after after
+            self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
+
+
 # Register the levels in this file
 register_levels(__name__, globals())
