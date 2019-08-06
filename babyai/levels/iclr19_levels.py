@@ -1260,8 +1260,6 @@ class Level_TransferGoToObjMultiple0(Level_TransferBase):
     """
     def __init__(self, room_size=8, seed=None):
         super().__init__(
-            num_rows=1,
-            num_cols=1,
             room_size=room_size,
             seed=seed
         )
@@ -1326,8 +1324,6 @@ class Level_TransferGoToObjMultiple1(Level_TransferBase):
     """
     def __init__(self, room_size=8, seed=None):
         super().__init__(
-            num_rows=1,
-            num_cols=1,
             room_size=room_size,
             seed=seed
         )
@@ -1392,8 +1388,6 @@ class Level_TransferGoToObjMultiple2(Level_TransferBase):
     """
     def __init__(self, room_size=8, seed=None):
         super().__init__(
-            num_rows=1,
-            num_cols=1,
             room_size=room_size,
             seed=seed
         )
@@ -1457,8 +1451,6 @@ class Level_TransferGoToObjThrees0(Level_TransferBase):
 
     def __init__(self, room_size=8, seed=None):
         super().__init__(
-            num_rows=1,
-            num_cols=1,
             room_size=room_size,
             seed=seed
         )
@@ -1501,8 +1493,6 @@ class Level_TransferGoToObjThrees1(Level_TransferBase):
 
     def __init__(self, room_size=8, seed=None):
         super().__init__(
-            num_rows=1,
-            num_cols=1,
             room_size=room_size,
             seed=seed
         )
@@ -1544,8 +1534,6 @@ class Level_TransferGoToObjThrees2(Level_TransferBase):
 
     def __init__(self, room_size=8, seed=None):
         super().__init__(
-            num_rows=1,
-            num_cols=1,
             room_size=room_size,
             seed=seed
         )
