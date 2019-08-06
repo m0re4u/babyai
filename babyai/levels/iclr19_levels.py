@@ -1253,7 +1253,7 @@ class Level_CustomGoToObjThrees(RoomGridLevel):
             self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
 
 
-class Level_TransferGoToObjMultiple0(RoomGridLevel):
+class Level_TransferGoToObjMultiple0(Level_TransferBase):
     """
     Pick up an object, the object may be in another room. The path may
     be blocked by one or more obstructors.
@@ -1319,7 +1319,7 @@ class Level_TransferGoToObjMultiple0(RoomGridLevel):
         self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
-class Level_TransferGoToObjMultiple1(RoomGridLevel):
+class Level_TransferGoToObjMultiple1(Level_TransferBase):
     """
     Pick up an object, the object may be in another room. The path may
     be blocked by one or more obstructors.
@@ -1385,7 +1385,7 @@ class Level_TransferGoToObjMultiple1(RoomGridLevel):
         self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
-class Level_TransferGoToObjMultiple2(RoomGridLevel):
+class Level_TransferGoToObjMultiple2(Level_TransferBase):
     """
     Pick up an object, the object may be in another room. The path may
     be blocked by one or more obstructors.
@@ -1451,7 +1451,7 @@ class Level_TransferGoToObjMultiple2(RoomGridLevel):
         self.instrs = BeforeInstr(obj_instr_0, obj_instr_1, strict=True)
 
 
-class Level_TransferGoToObjThrees0(RoomGridLevel):
+class Level_TransferGoToObjThrees0(Level_TransferBase):
     """
     """
 
@@ -1495,7 +1495,7 @@ class Level_TransferGoToObjThrees0(RoomGridLevel):
             self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
 
 
-class Level_TransferGoToObjThrees1(RoomGridLevel):
+class Level_TransferGoToObjThrees1(Level_TransferBase):
     """
     """
 
@@ -1538,7 +1538,7 @@ class Level_TransferGoToObjThrees1(RoomGridLevel):
             # after after
             self.instrs = ThreeOrderedInstr(go_0, go_1, go_2, strict=True, mode='afterafter')
 
-class Level_TransferGoToObjThrees2(RoomGridLevel):
+class Level_TransferGoToObjThrees2(Level_TransferBase):
     """
     """
 
